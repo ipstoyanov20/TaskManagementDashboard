@@ -1,57 +1,72 @@
-﻿GET http://localhost:8080/api/v1/tasks
+﻿GET http://localhost:8080/tasks
 Accept: application/json
 
 ###
 
-GET http://localhost:8080/api/v1/tasks?priority=2
+GET http://localhost:8080/tasks?priority=2
 Accept: application/json
 
 ###
 
-POST http://localhost:8080/api/v1/tasks
+GET http://localhost:8080/tasks?title=dog
+Accept: application/json
+
+###
+
+GET http://localhost:8080/tasks?priority=1&title=Meet
+Accept: application/json
+
+###
+
+POST http://localhost:8080/tasks
 Content-Type: application/json
 
 [
   {
-    "title": "Buy groceries",
-    "status": "pending",
-    "priority": 2
+    "title": "Meet the dog",
+    "description": "Take for a walk",
+    "priority": 1,
+    "deadline": "2025-12-01"
   }
 ]
 
 ###
 
-POST http://localhost:8080/api/v1/tasks
+POST http://localhost:8080/tasks
 Content-Type: application/json
 
 [
   {
-    "title": "Walk the dog",
-    "status": "done",
-    "priority": 1
+    "title": "Write report",
+    "description": "End of month tasks",
+    "priority": 3,
+    "deadline": "2025-11-30"
   },
   {
     "title": "Pay bills",
-    "status": "pending",
-    "priority": 3
+    "description": "",
+    "priority": 3,
+    "deadline": "2025-11-15"
   }
 ]
 
 ###
 
-PUT http://localhost:8080/api/v1/tasks/1
+PUT http://localhost:8080/tasks/1
 Content-Type: application/json
 
 {
-  "status": "completed",
-  "priority": 4
+  "title": "Walk the dog",
+  "description": "Evening walk in park",
+  "priority": 2,
+  "deadline": "2025-12-05"
 }
 
 ###
 
-DELETE http://localhost:8080/api/v1/tasks/1
+DELETE http://localhost:8080/tasks/1
 
 ###
 
-GET http://localhost:8080/api/v1/tasks/activity-log?limit=10&offset=1
-
+GET http://localhost:8080/tasks/activity-log?limit=10&offset=0
+Accept: application/json

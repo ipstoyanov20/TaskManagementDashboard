@@ -17,12 +17,11 @@ func Setup(db *gorm.DB) *gin.Engine {
 	taskService := services.NewTaskService(taskRepo, logRepo)
 	taskController := controllers.NewTaskController(taskService)
 
-	api := router.Group("/api/v1")
-	api.GET("/tasks", taskController.List)
-	api.POST("/tasks", taskController.Create)
-	api.PUT("/tasks/:id", taskController.Update)
-	api.DELETE("/tasks/:id", taskController.Delete)
-	api.GET("/tasks/activity-log", taskController.LogList)
+	router.GET("/tasks", taskController.List)
+	router.POST("/tasks", taskController.Create)
+	router.PUT("/tasks/:id", taskController.Update)
+	router.DELETE("/tasks/:id", taskController.Delete)
+	router.GET("/tasks/activity-log", taskController.LogList)
 
 	return router
 }

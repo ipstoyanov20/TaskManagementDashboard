@@ -1,10 +1,13 @@
 ﻿package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Task struct {
 	gorm.Model
-	Title    string `json:"title" binding:"required"`
-	Status   string `json:"status"`
-	Priority int    `json:"priority"`
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description"`
+	Priority    int    `json:"priority"`
+	Deadline    string `json:"deadline"`
 }

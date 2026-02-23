@@ -16,12 +16,24 @@ func NewTaskService(r *repositories.TaskRepository, lr *repositories.LogReposito
 	return &TaskService{Repo: r, LogRepo: lr}
 }
 
-func (s *TaskService) ListTasks(priority *int) ([]models.Task, error) {
-	filters := make(map[string]interface{})
+func (s *TaskService) ListTasks(priority *int, title *string) ([]models.Task, error) {
+	db := s.Repo.DB
+
 	if priority != nil {
-		filters["priority"] = *priority
+		db = db.Where("priority = ?", *priority)
 	}
-	return s.Repo.All(filters)
+
+	if title != nil && *title != "" {
+		db = db.Where("title ILIKE ?", "%"+*title+"%")
+	}
+
+	var tasks []models.Task
+	err := db.Find(&tasks).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }
 
 func (s *TaskService) CreateTask(t *models.Task) error {
@@ -35,7 +47,7 @@ func (s *TaskService) CreateTask(t *models.Task) error {
 func (s *TaskService) BulkUpdate(tasks []models.Task) error {
 	for _, t := range tasks {
 		old := fmt.Sprintf("%+v", t)
-		data := map[string]interface{}{"status": t.Status, "priority": t.Priority}
+		data := map[string]interface{}{"title": t.Title, "description": t.Description, "priority": t.Priority, "deadline": t.Deadline}
 		s.Repo.Update(t.ID, data)
 		s.logActivity(t.ID, "update", old, fmt.Sprintf("%+v", t))
 	}

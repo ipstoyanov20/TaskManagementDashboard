@@ -1,12 +1,8 @@
 ﻿package dto
 
-type TaskCreateDTO struct {
-	Title    string `json:"title" binding:"required"`
-	Status   string `json:"status"`
-	Priority int    `json:"priority"`
-}
-
-type TaskUpdateDTO struct {
-	Status   string `json:"status"`
-	Priority int    `json:"priority"`
+type TaskCreateUpdateDTO struct {
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description"`
+	Priority    int    `json:"priority"`
+	Deadline    string `json:"deadline"`
 }
