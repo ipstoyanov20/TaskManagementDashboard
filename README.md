@@ -86,6 +86,6 @@ npm run build
 
 ---
 
-## License
-Refer to the `LICENSE` file for more information.
+## What new I have learned
 
+Although I am an experienced backend developer, working with Go, Gin, and GORM was new to me syntactically, making it a valuable experience in adapting familiar backend concepts to a different language and ecosystem.
