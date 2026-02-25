@@ -5,12 +5,15 @@ import (
 	"src/repositories"
 	"src/services"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 func Setup(db *gorm.DB) *gin.Engine {
 	router := gin.Default()
+
+	router.Use(cors.Default())
 
 	taskRepo := repositories.NewTaskRepo(db)
 	logRepo := repositories.NewLogRepo(db)

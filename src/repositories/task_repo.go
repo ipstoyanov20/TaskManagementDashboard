@@ -17,8 +17,8 @@ func NewTaskRepo(db *gorm.DB) *TaskRepository {
 func (r *TaskRepository) All(filters map[string]interface{}) ([]models.Task, error) {
 	var tasks []models.Task
 	query := r.DB
-	if p, ok := filters["priority"]; ok {
-		query = query.Where("priority = ?", p)
+	for key, value := range filters {
+		query = query.Where(key+" = ?", value)
 	}
 	err := query.Find(&tasks).Error
 	return tasks, err

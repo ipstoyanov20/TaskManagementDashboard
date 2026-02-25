@@ -45,26 +45,54 @@ func (c *TaskController) List(ctx *gin.Context) {
 }
 
 func (c *TaskController) Create(ctx *gin.Context) {
-	var input []dto.TaskCreateUpdateDTO
+	var input dto.TaskCreateUpdateDTO
 	if err := ctx.ShouldBindJSON(&input); err == nil {
-		for _, t := range input {
-			task := models.Task{Title: t.Title, Description: t.Description, Priority: t.Priority, Deadline: t.Deadline}
-			c.Service.CreateTask(&task)
+		task := models.Task{
+			Title:       input.Title,
+			Description: input.Description,
+			Priority:    input.Priority,
+			Deadline:    input.Deadline,
 		}
-		ctx.Status(http.StatusCreated)
+		if err := c.Service.CreateTask(&task); err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusCreated, task)
 	} else {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 }
 
 func (c *TaskController) Update(ctx *gin.Context) {
-	id, _ := strconv.ParseUint(ctx.Param("id"), 10, 32)
-	var input dto.TaskCreateUpdateDTO
-	if ctx.ShouldBindJSON(&input) == nil {
-		data := map[string]interface{}{"title": input.Title, "description": input.Description, "priority": input.Priority, "deadline": input.Deadline}
-		c.Service.UpdateTask(uint(id), data)
+	idStr := ctx.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
 	}
-	ctx.Status(http.StatusOK)
+
+	var input dto.TaskCreateUpdateDTO
+	if err := ctx.ShouldBindJSON(&input); err == nil {
+		data := map[string]interface{}{
+			"title":       input.Title,
+			"description": input.Description,
+			"priority":    input.Priority,
+			"deadline":    input.Deadline,
+		}
+		if err := c.Service.UpdateTask(uint(id), data); err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		// Fetch the updated task to return it
+		tasks, _ := c.Service.Repo.All(map[string]interface{}{"id": uint(id)})
+		if len(tasks) > 0 {
+			ctx.JSON(http.StatusOK, tasks[0])
+		} else {
+			ctx.Status(http.StatusOK)
+		}
+	} else {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
 }
 
 func (c *TaskController) Delete(ctx *gin.Context) {
