@@ -49,11 +49,7 @@ The frontend is a modern web application built with React and Vite.
    ```bash
    npm install
    ```
-3. Create a `.env` file in the `web/` directory if you need to override API endpoints:
-   ```env
-   VITE_API_BASE_URL=http://localhost:8080
-   ```
-4. Start the development server:
+3. Start the development server:
    ```bash
    npm run dev
    ```
