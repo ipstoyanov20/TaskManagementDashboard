@@ -4,7 +4,7 @@ A comprehensive task management application with a Go backend and a React fronte
 
 ## Project Structure
 
-- `src/`: Backend source code (Go, Docker, PostgreSQL)
+- `src/`: Backend source code (Go, Docker, PostgreSQL in Railway)
 - `web/`: Frontend source code (React, TypeScript, Vite)
 
 ---
